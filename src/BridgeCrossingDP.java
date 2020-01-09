@@ -14,12 +14,15 @@ public class BridgeCrossingDP {
     static int maxM;
     static int[] time;
     static int num;
+    static HashMap<Integer, Integer> mapFlag = new HashMap<>();
 
-
-    static LinkedList<Integer> list = new LinkedList<>();
-
+    static HashMap<Integer, Integer> map = new HashMap<>();
 
     public static int findMinPersonToTime(int i) { // has to be a suffix
+
+        if(mapFlag.containsKey(i)){
+            return mapFlag.get(i);
+        }
 
 
         int min = Integer.MAX_VALUE;
@@ -36,12 +39,21 @@ public class BridgeCrossingDP {
             }
 
         }
-       /* if(pos != 0) {
-            list.add(pos);
-        }*/
-        return min == Integer.MAX_VALUE ? 0 : min; }
 
+       map.put(i, i+pos);
 
+        mapFlag.put(i, min == Integer.MAX_VALUE ? 0 : min);
+        return mapFlag.get(i); }
+
+    public static void goRecur(int i){
+        if(i > personToTime.length-1)
+            return;
+        for (int j = map.get(i)-i; j > 0; j--) {
+            System.out.print(personToTime[map.get(i)-j] + " ");
+        }
+        System.out.println();
+        goRecur(map.get(i));
+    }
 
     public static int findMaxInArray(int i, int j) {
         int max = time[i];
@@ -65,17 +77,7 @@ public class BridgeCrossingDP {
 
         System.out.println(findMinPersonToTime(0));
         int count = 0;
-        for (Integer a : list) {
-
-            for (int i = 0; i < a; i++) {
-
-
-                System.out.print(personToTime[count] + " ");
-
-                count++;
-            }
-            System.out.println();
-        }
+        goRecur(0);
 
     }
 
